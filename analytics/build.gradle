@@ -1,0 +1,87 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    namespace 'com.cardinalhealth.orderexpress.core.analytics'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 33
+        versionName project.ext.appVersionName()
+        versionCode project.ext.appVersionCode()
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        //mockDebug will used for espresso testing in mock manner, i.e. API calls will be stubbed at client level only
+        mock {
+            dimension "default"
+            versionNameSuffix "-mock"
+            buildConfigField 'boolean', 'IS_PROD', 'false'
+        }
+        //prodDebug will used for regular development, manual testing and unit testing
+        //prodRelease will be actual play store release
+        prod {
+            dimension "default"
+            buildConfigField 'boolean', 'IS_PROD', 'true'
+        }
+    }
+}
+
+dependencies {
+
+    implementation(project(":core:sharedpreference"))
+    implementation(project(":core:common"))
+    implementation(project(":core:model"))
+
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //Flurry
+    implementation 'com.flurry.android:analytics:14.1.0'
+    implementation 'com.google.android.gms:play-services-ads-identifier:17.1.0'
+
+    //Adobe Analytics
+    implementation 'com.adobe.marketing.mobile:sdk-core:1.11.4'
+    implementation 'com.adobe.marketing.mobile:analytics:1.2.10'
+    implementation 'com.adobe.marketing.mobile:audience:1.1.0'
+    implementation 'com.adobe.marketing.mobile:campaign:1.0.9'
+    implementation 'com.adobe.marketing.mobile:campaignclassic:1.0.2'
+    implementation 'com.adobe.marketing.mobile:target:1.4.0'
+    implementation 'com.adobe.marketing.mobile:griffon:1.2.1'
+    implementation 'com.adobe.marketing.mobile:userprofile:1.1.0'
+
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+
+}
