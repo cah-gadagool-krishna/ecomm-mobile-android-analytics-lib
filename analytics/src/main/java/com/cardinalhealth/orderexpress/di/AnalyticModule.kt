@@ -24,7 +24,7 @@ object AnalyticModule {
     fun provideStorefrontUtils(): StorefrontUtils = StorefrontUtils()
 
 
-    
+
     @Provides
     @Singleton
     fun provideAnalyticHelper(appContext: Application): AnalyticsHelper =
